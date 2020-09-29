@@ -17,6 +17,20 @@ import InterviewerList from 'components/InterviewerList';
 
 import Appointment from 'components/Appointments/index'
 
+import Header from 'components/Appointments/Header';
+
+import Empty from 'components/Appointments/Empty';
+
+import Show from 'components/Appointments/Show'
+
+import Confirm from "components/Appointments/Confirm";
+
+import Status from 'components/Appointments/Status'
+
+import Error from 'components/Appointments/Error'
+
+// import Empty from 'components/Appointments/Empty'
+
 storiesOf("Button", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -148,3 +162,9 @@ storiesOf("InterviewerList", module)
   })
   .add("Appointment", () => <Appointment />)
   .add("Appointment with Time", () => <Appointment time="12pm" />)
+  .add("Header", () => < Header time="12pm" />)
+  .add("Empty", () => <Empty onAdd={action("onAdd")} />)
+  .add("Show", () => <Show interviewer={interviewers[1]} student="Clinton" onEdit={action("onEdit")} onDelete={action("onDelete")} />)
+  .add("Confirm", () => <Confirm message="Delete the Appointment bro?" onConfirm={action("onConfirm")} onCancel={action("onCancel")} />)
+  .add("Status", () => <Status message="Deleting" />)
+  .add("Error", () => <Error message="There's been an Error friend" onClose={action("onClose")} />)
