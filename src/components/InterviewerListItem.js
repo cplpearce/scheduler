@@ -15,7 +15,7 @@ export default function InterviewerListItem(props) {
     );
 
   return (
-    <li key={props.id} className={InterviewerItemClasses}>
+    <li className={InterviewerItemClasses}>
       <img
         className={InterviewerItemImageClasses} 
         src={props.avatar}
