@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from 'react'
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -28,6 +28,8 @@ import Confirm from "components/Appointments/Confirm";
 import Status from 'components/Appointments/Status'
 
 import Error from 'components/Appointments/Error'
+
+import Form from 'components/Appointments/Form'
 
 // import Empty from 'components/Appointments/Empty'
 
@@ -168,3 +170,30 @@ storiesOf("InterviewerList", module)
   .add("Confirm", () => <Confirm message="Delete the Appointment bro?" onConfirm={action("onConfirm")} onCancel={action("onCancel")} />)
   .add("Status", () => <Status message="Deleting" />)
   .add("Error", () => <Error message="There's been an Error friend" onClose={action("onClose")} />)
+  .add('Form Edit', () => <Form
+    name='Clinton'
+    interviewers={interviewers}
+    interviewer={interviewer.id}
+    onSave={action('onSave')}
+    onCancel={action('onCancel')} />)
+  .add('Form Create', () => <Form
+    interviewers={interviewers}
+    onSave={action('onSave')}
+    onCancel={action('onCancel')}
+  />)
+  .add("Appointment Empty", () => (
+    <Fragment>
+      <Appointment id={1} time="12pm" />
+      <Appointment className="last-of-type" id="last" time="1pm" />
+    </Fragment>
+  ))
+  .add("Appointment Booked", () => (
+    <Fragment>
+      <Appointment
+        id={1}
+        time="12pm"
+        interview={{ student: "Lydia Miller-Jones", interviewer: 'Smarter Clint' }}
+      />
+      <Appointment id="last" time="1pm" />
+    </Fragment>
+  ))
