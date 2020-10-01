@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.0.0"
   },
+  "proxy": "http://localhost:8001",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -38,7 +40,7 @@
     "@storybook/react": "^5.3.21",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^8.0.9",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.0.5",
     "node-sass": "^4.14.1"
   },
   "jest": {
