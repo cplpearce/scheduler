@@ -15,21 +15,21 @@ import InterviewerListItem from 'components/InterviewerListItem';
 
 import InterviewerList from 'components/InterviewerList';
 
-import Appointment from 'components/Appointments/index'
+import Appointment from 'components/Appointment/index'
 
-import Header from 'components/Appointments/Header';
+import Header from 'components/Appointment/Header';
 
-import Empty from 'components/Appointments/Empty';
+import Empty from 'components/Appointment/Empty';
 
-import Show from 'components/Appointments/Show'
+import Show from 'components/Appointment/Show'
 
-import Confirm from "components/Appointments/Confirm";
+import Confirm from "components/Appointment/Confirm";
 
-import Status from 'components/Appointments/Status'
+import Status from 'components/Appointment/Status'
 
-import Error from 'components/Appointments/Error'
+import Error from 'components/Appointment/Error'
 
-import Form from 'components/Appointments/Form'
+import Form from 'components/Appointment/Form'
 
 // import Empty from 'components/Appointments/Empty'
 

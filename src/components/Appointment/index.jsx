@@ -1,10 +1,10 @@
 import React from "react";
 
-import 'components/Appointments/styles.scss';
+import 'components/Appointment/styles.scss';
 
-import Header from 'components/Appointments/Header'
-import Show from 'components/Appointments/Show'
-import Empty from 'components/Appointments/Empty'
+import Header from 'components/Appointment/Header'
+import Show from 'components/Appointment/Show'
+import Empty from 'components/Appointment/Empty'
 
 // const classNames = require('classnames');
 
