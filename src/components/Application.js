@@ -1,12 +1,15 @@
 // F R A M E W O R K   I M P O R T S
 import React, { useState, useEffect } from "react";
+
 // C O M P O N E N T   I M P O R T S
 import "components/Application.scss";
 import "components/DayListItem.scss";
-import DayList from "./DayList"
+import DayList from "components/DayList"
 import Appointment from 'components/Appointment'
+
 // H E L P E R   I M P O R T S
-import { getAppointmentsForDay, getInterview } from '../helpers/selectors';
+import { getAppointmentsForDay, getInterviewersForDay, getInterview } from '../helpers/selectors';
+
 // M I D D L E W A R E   I M P O R T S
 const axios = require('axios');
 
@@ -17,24 +20,14 @@ export default function Application(props) {
     day: 'Monday',
     days: [],
     appointments: {},
-    interviewers: {},
+    interviewer: {},
   })
 
-  // set the day state variable when called
-  const setDay = day => setState({ ...state, day });
+  console.log(state)
+
   // appointments selector helper function
   const appointments = getAppointmentsForDay(state, state.day);
-  // generate the schedule with the appointment selector
-  const schedule = appointments.map(appointment => {
-    const interview = getInterview(state, appointment.interview);
-    return (
-      <Appointment 
-        key = { appointment.id } 
-        { ...appointment } 
-        interview = { interview } 
-      />
-    );
-  })
+  
   // A X I O S   G E T   A L L   P R O M I S E S
   useEffect(() => {
     Promise.all([
@@ -46,13 +39,12 @@ export default function Application(props) {
       // pull *all* the data, into an array of get response data
       setState(prev => ({ ...prev, days: days.data, appointments: appointments.data, interviewers: interviewers.data }))
     })
-      .catch(err => {
-        console.log(err.response.status)
-        console.log(err.response.headers)
-        console.log(err.response.data)
-      })
-      // only call once
   }, []);
+
+  // M O D I F Y   I N T E R V I E W S
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+  }
 
   // A P P L I C A T I O N   R E N D E R
   return (
@@ -68,7 +60,7 @@ export default function Application(props) {
           <DayList
             days={ state.days }
             day={ state.day }
-            setDay={ setDay }
+            setDay={ day => setState({ ...state, day: day }) }
           />
         </nav>
         <img
@@ -78,7 +70,19 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        { schedule }
+        {appointments.map(appointment => {
+          const interview = getInterview(state, appointment.interview);
+          const interviewers = getInterviewersForDay(state, state.day);
+          return (
+            <Appointment
+              key={ appointment.id }
+              { ...appointment }
+              interview={ interview }
+              interviewers={ interviewers }
+              bookInterview={ bookInterview }
+              />
+          );
+        })}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
