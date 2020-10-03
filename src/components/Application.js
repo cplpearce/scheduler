@@ -1,17 +1,18 @@
-// framework imports
+// F R A M E W O R K   I M P O R T S
 import React, { useState, useEffect } from "react";
-// component imports
+// C O M P O N E N T   I M P O R T S
 import "components/Application.scss";
 import "components/DayListItem.scss";
 import DayList from "./DayList"
 import Appointment from 'components/Appointment'
-// helper imports
+// H E L P E R   I M P O R T S
 import { getAppointmentsForDay, getInterview } from '../helpers/selectors';
-// middleware import
+// M I D D L E W A R E   I M P O R T S
 const axios = require('axios');
 
+// A P P L I C A T I O N   B E G I N S
 export default function Application(props) {
-  // react states
+  // combined states
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
@@ -19,50 +20,43 @@ export default function Application(props) {
     interviewers: {},
   })
 
+  // set the day state variable when called
   const setDay = day => setState({ ...state, day });
+  // appointments selector helper function
   const appointments = getAppointmentsForDay(state, state.day);
+  // generate the schedule with the appointment selector
   const schedule = appointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
     return (
       <Appointment 
-        key={appointment.id} 
-        {...appointment} 
-        interview={interview} 
+        key = { appointment.id } 
+        { ...appointment } 
+        interview = { interview } 
       />
     );
   })
-  // axios get on all endpoints of the API server
+  // A X I O S   G E T   A L L   P R O M I S E S
   useEffect(() => {
     Promise.all([
       axios.get('/api/days'),
       axios.get('/api/appointments'),
-      axios.get('/api/interviewers')
-    ]).then(all => {
-      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }))
+      axios.get('/api/interviewers'),
+    ]).then(data => {
+      const [days, appointments, interviewers] = data;
+      // pull *all* the data, into an array of get response data
+      setState(prev => ({ ...prev, days: days.data, appointments: appointments.data, interviewers: interviewers.data }))
+      console.log(data)
     })
       .catch(err => {
         console.log(err.response.status)
         console.log(err.response.headers)
         console.log(err.response.data)
       })
+      // only call once
   }, []);
 
-  useEffect(() => {
-    Promise.all([
-      axios.get('/api/days'),
-      axios.get('/api/appointments'),
-      axios.get('/api/interviewers')
-    ]).then(all => {
-      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }))
-    })
-      .catch(err => {
-        console.log(err.response.status)
-        console.log(err.response.headers)
-        console.log(err.response.data)
-      })
-  }, []);
-
-  render() {
+  // A P P L I C A T I O N   R E N D E R
+  return (
     <main className="layout">
       <section className="sidebar">
         <img
@@ -89,25 +83,5 @@ export default function Application(props) {
         <Appointment key="last" time="5pm" />
       </section>
     </main>
-  };
+  );
 }
-
-// Older commented code for referencing later
-
-/*
-const urls = {
-  GET_DAYS: 'http://localhost:8001/api/days',
-  GET_APPOINTMENTS: 'http://localhost:8001/api/appointments',
-  GET_INTERVIEWERS: 'http://localhost:8001/api/interviewers',
-}
-
-const promiseDays = axios.get(urls.GET_DAYS)
-const promiseAppointments = axios.get(urls.GET_APPOINTMENTS)
-const promiseInterviewers = axios.get(urls.GET_INTERVIEWERS)
-
-useEffect(() => {
-  const url = 'http://localhost:8001/api/days';
-  axios.get(url)
-    .then(res => setDays([...res.data]))
-}, [])
-*/

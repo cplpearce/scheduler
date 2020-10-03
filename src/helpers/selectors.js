@@ -16,9 +16,7 @@ function getInterview(state, interview) {
   
   Object.values(state.interviewers).map(
     interview => {
-      if (Number(interview.id) === interviewerID) { 
-        appointment.interviewer = state.interviewers[interviewerID] 
-      }
+      appointment.interviewer = (Number(interview.id) === interviewerID) && state.interviewers[interviewerID];
     })
   return appointment;
 };
