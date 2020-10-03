@@ -12,7 +12,7 @@ const axios = require('axios');
 
 // A P P L I C A T I O N   B E G I N S
 export default function Application(props) {
-  // combined states
+  // REACT STATE DECL
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
@@ -45,7 +45,6 @@ export default function Application(props) {
       const [days, appointments, interviewers] = data;
       // pull *all* the data, into an array of get response data
       setState(prev => ({ ...prev, days: days.data, appointments: appointments.data, interviewers: interviewers.data }))
-      console.log(data)
     })
       .catch(err => {
         console.log(err.response.status)
@@ -67,9 +66,9 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            days={state.days}
-            day={state.day}
-            setDay={setDay}
+            days={ state.days }
+            day={ state.day }
+            setDay={ setDay }
           />
         </nav>
         <img
@@ -79,7 +78,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {schedule}
+        { schedule }
         <Appointment key="last" time="5pm" />
       </section>
     </main>
