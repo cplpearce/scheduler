@@ -15,15 +15,13 @@ const axios = require('axios');
 
 // A P P L I C A T I O N   B E G I N S
 export default function Application(props) {
-  // REACT STATE DECL
+  // R E A C T   S T A T E   D E C L
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
     appointments: {},
     interviewer: {},
   })
-
-  console.log(state)
 
   // appointments selector helper function
   const appointments = getAppointmentsForDay(state, state.day);
@@ -42,8 +40,41 @@ export default function Application(props) {
   }, []);
 
   // M O D I F Y   I N T E R V I E W S
+  // Book a new interview
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    return axios.put(`/api/appointments/${id}`, appointment).then((res) => {
+      setState({
+        ...state,
+        appointments,
+      });
+    });
+  }
+  
+  // Cancel an interview
+  const cancelInterview = function(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    }
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    return axios.delete(`/api/appointments/${id}`)
+    .then((res) => {
+      setState({
+        ...state,
+        appointments
+      });
+    })
   }
 
   // A P P L I C A T I O N   R E N D E R
@@ -75,12 +106,14 @@ export default function Application(props) {
           const interviewers = getInterviewersForDay(state, state.day);
           return (
             <Appointment
-              key={ appointment.id }
-              { ...appointment }
-              interview={ interview }
-              interviewers={ interviewers }
-              bookInterview={ bookInterview }
-              />
+              {...appointment}
+              key={appointment.id}
+              id={appointment.id}
+              interview={interview}
+              interviewers={interviewers}
+              bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
+            />
           );
         })}
         <Appointment key="last" time="5pm" />
