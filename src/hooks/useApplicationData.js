@@ -1,71 +1,72 @@
 import { useReducer, useEffect } from "react";
 import axios from "axios";
+import reducer, {
+  SET_DAY,
+  SET_INTERVIEW,
+  SET_APPLICATION_DATA,
+} from "reducers/application";
 
+// Functions used to update state upon booking and cancelling an Interview
 export default function useApplicationData() {
-
-  // REACT STATE DECL
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewer: {},
-  });
-  
-  // A X I O S   G E T   A L L   P R O M I S E S
-  useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers"),
-    ]).then((data) => {
-      const [days, appointments, interviewers] = data;
-      // pull *all* the data, into an array of get response data
-      setState((prev) => ({
-        ...prev,
-        days: days.data,
-        appointments: appointments.data,
-        interviewers: interviewers.data,
-      }));
-    });
-  }, []);
-
-  // M O D I F Y   I N T E R V I E W S
-  // Book a new interview
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
     };
+
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
-    return axios.put(`/api/appointments/${id}`, appointment).then((res) => {
-      setState({
-        ...state,
-        appointments,
-      });
+
+    dispatch({ type: SET_INTERVIEW, id: id, interview: interview });
+    return axios.put(`/api/appointments/${id}`, { interview });
+  }
+
+  function cancelInterview(id) {
+    return axios.delete(`/api/appointments/${id}`).then(() => {
+      const nullAppointment = {
+        ...state.appointments[id],
+        interview: null,
+      };
+
+      const appointments = {
+        ...state.appointments,
+        [id]: nullAppointment,
+      };
+
+      dispatch({ type: SET_INTERVIEW, id: id, interview: null });
     });
   }
 
-  // Cancel an interview
-  const cancelInterview = function (id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
+  const [state, dispatch] = useReducer(reducer, {
+    day: "Monday",
+    days: [],
+    appointments: {},
+    interviewers: {},
+  });
 
-    return axios.delete(`/api/appointments/${id}`).then((res) => {
-      setState({
-        ...state,
-        appointments,
+  const setDay = (day) => dispatch({ type: SET_DAY, day: day });
+
+  // Calls to Server
+  useEffect(() => {
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers"),
+    ]).then((all) => {
+      dispatch({
+        type: SET_APPLICATION_DATA,
+        days: all[0].data,
+        appointments: all[1].data,
+        interviewers: all[2].data,
       });
     });
+  }, []);
+  return {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview,
   };
-
-  return { state, bookInterview, cancelInterview };
 }

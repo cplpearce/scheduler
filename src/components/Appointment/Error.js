@@ -1,5 +1,6 @@
-import React from 'react';
+import React from "react";
 
+// E R R O R   C A R D
 export default function Error(props) {
   return (
     <main className="appointment__card appointment__card--error">
@@ -14,5 +15,5 @@ export default function Error(props) {
         onClick={props.onClose}
       />
     </main>
-  )
+  );
 }

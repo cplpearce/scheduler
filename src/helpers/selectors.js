@@ -1,18 +1,32 @@
-// F I L T E R   A P P O I N T M E N T S
-function getAppointmentsForDay(state, dayName) {
-  const day = state.days.find(d => d.name === dayName)
-  return (day && state.days.find(d => d.name === dayName).appointments.map(key => state.appointments[key]) || [])
-};
+// Gets the appointments for a given day
+export function getAppointmentsForDay(state, day) {
+  const validDays = state.days.map(day => day.name);
+  if (!day || !validDays.includes(day)) return [];
 
-// F I L T E R   I N T E R V I E W E R S
-function getInterviewersForDay(state, dayName) {
-  const day = state.days.find(d => d.name === dayName)
-  return (day && state.days.find(d => d.name === dayName).interviewers.map(key => state.interviewers[key]) || [])
-};
+  return state.days
+    .filter(appointment => appointment.name === day)[0]
+    .appointments.map(apptId => state.appointments[apptId]);
+}
 
-// G E T   S P E C I F I C   I N T E R V I E W 
-function getInterview(state, interview) {
-  return (interview && { ...interview, interviewer: state.interviewers[interview.interviewer] })
-};
+// Gets an interview
+export function getInterview(state, interview) {
+  if (!interview) return null;
+  const interviewObj = {
+    student: interview.student
+  };
 
-export { getAppointmentsForDay, getInterviewersForDay, getInterview };
+  interviewObj.interviewer = state.interviewers[interview.interviewer];
+  return interviewObj;
+}
+
+// Gets the interviewers for a given day
+export function getInterviewersForDay(state, dayName) {
+  const validDayNames = state.days.map(dayObj => dayObj.name);
+  if (!dayName || !validDayNames.includes(dayName)) return [];
+
+  const todayObj = state.days.filter(dayObj => dayObj.name === dayName)[0];
+  const interviewersObj = todayObj.interviewers.map(
+    interId => state.interviewers[interId]
+  );
+  return interviewersObj;
+}

@@ -1,29 +1,26 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-// C H A N G E   V I S U A L M O D E   H O O K
-export default function useVisualMode(initMode) {
-  const [mode, setMode] = useState(initMode)
-  const [history, setHistory] = useState([initMode])
-
-  // T R A N S I T I T I O N   V I S U A L   M O D E
-  const transition = (newMode, replace = false) => {
-    setMode(newMode)
-    setHistory(prev => {
-      const modeHistory = ((replace && [...prev.slice(0, -1)]) || [...prev])
-      return [...modeHistory, newMode]
-    })
+// Helper function passed to Index.js to update state for transitions
+export default function useVisualMode(initial) {
+  const [mode, setMode] = useState(initial);
+  const [history, setHistory] = useState([initial]);
+  function transition(mode, replace = false) {
+    if (replace) {
+      setMode(mode);
+    } else {
+      setMode(mode);
+      setHistory([...history, mode]);
+    }
   }
-  // G O   B A C K   T O   L A S T   H I S T O R Y   V A L U E
-  const back = () => {
-    setHistory(prev => {
-      // don't reverse past the intial value
-      if (prev.length === 1) { return prev }
-      // get the current history minus one value
-      let modeHistory = [...prev.slice(0, -1)]
-      setMode(modeHistory[modeHistory.length - 1]);
-      return modeHistory;
-    })
-  };
 
-  return { mode, transition, back }
+  function back() {
+    if (history.length === 1) {
+      setMode(initial);
+    } else {
+      setMode(history[history.length - 2]);
+      setHistory(history.slice(0, -1));
+    }
+  }
+
+  return { mode, transition, back };
 }

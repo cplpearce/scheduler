@@ -1,7 +1,6 @@
 import React from "react";
 
-// import 'components/Appointments/styles.scss';
-
+// E M P T Y   A P P O I N T M E N T   C A R D
 export default function Empty(props) {
   return (
     <main className="appointment__add">
@@ -12,5 +11,5 @@ export default function Empty(props) {
         onClick={props.onAdd}
       />
     </main>
-  )
+  );
 }
