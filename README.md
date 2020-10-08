@@ -31,16 +31,16 @@ npm run cypress
 
 
 ## Dependencies
-  "axios": "^0.20.0",
-  "classnames": "^2.2.6",
-  "normalize.css": "^8.0.1",
-  "react": "^16.13.1",
-  "react-dom": "^16.13.1",
-  "react-hooks-testing-library": "^0.6.0",
-  "react-scripts": "3.0.0"
+*   "axios": "^0.20.0",
+*   "classnames": "^2.2.6",
+*   "normalize.css": "^8.0.1",
+*   "react": "^16.13.1",
+*   "react-dom": "^16.13.1",
+*   "react-hooks-testing-library": "^0.6.0",
+*   "react-scripts": "3.0.0"
 
 ## Data Feed
-fed by either static data or any server catering to the folloing endpoints:
+Scheduler is fed by either static data or any server catering to the folloing endpoints:
 ```
 `GET /api/days`
 ```
